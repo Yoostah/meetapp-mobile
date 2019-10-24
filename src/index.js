@@ -6,16 +6,16 @@ import { StatusBar } from 'react-native';
 import './config/ReactotronConfig';
 
 import { store, persistor } from './store';
-import Routes from './routes';
+import App from './App';
 
 // import { Container } from './styles';
 
-export default function App() {
+export default function Index() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <StatusBar barStyle="light-content" backgroundColor="#22202c" />
-        <Routes />
+        <App />
       </PersistGate>
     </Provider>
   );
