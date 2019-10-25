@@ -1,6 +1,10 @@
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import { formatRelative } from 'date-fns/esm';
+import { parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/esm/locale';
 
 import { API_IP } from 'react-native-dotenv';
 
@@ -12,10 +16,25 @@ import {
   TextArea,
   ButtonSubmit,
   TextInfo,
+  PastEvent
 } from './styles';
+
 
 export default function Meetups({ meetupData }) {
   const { meetup_banner } = meetupData;
+  const [pastEventTime, setPastEventTime] = useState();
+
+  useMemo(() =>{
+    if(meetupData.past){
+      const eventPastSince = formatRelative(parseISO(meetupData.schedule), new Date(), {
+        locale: ptBR,
+        addSuffix: true,
+      });
+
+      setPastEventTime(eventPastSince);
+    }
+
+  },[]);
 
   return (
     <Container>
@@ -40,12 +59,13 @@ export default function Meetups({ meetupData }) {
           <TextInfo>Organizador: {meetupData.owner.name}</TextInfo>
         </TextArea>
       </MeetupData>
+      { meetupData.past ? (<PastEvent>Meetup foi realizado {pastEventTime}</PastEvent>) : (
       <ButtonSubmit
-        style={meetupData.past ? { display: 'none' } : ''}
         onPress={() => {}}
       >
         Realizar Inscrição
-      </ButtonSubmit>
+      </ButtonSubmit>)}
+
     </Container>
   );
 }

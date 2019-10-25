@@ -42,3 +42,11 @@ export const TextInfo = styled.Text`
 export const ButtonSubmit = styled(Button)`
   margin: 0 20px;
 `;
+
+export const PastEvent = styled.Text`
+  color: #e5556e;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 20px;
+`;
