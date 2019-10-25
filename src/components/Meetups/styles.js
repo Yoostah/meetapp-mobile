@@ -43,10 +43,37 @@ export const ButtonSubmit = styled(Button)`
   margin: 0 20px;
 `;
 
-export const PastEvent = styled.Text`
-  color: #e5556e;
+export const PastEvent = styled.View`
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+  background: rgba(0,0,0,.1);
+  padding: 5px 0;
+  margin: 0 20px;
+
+`;
+
+export const PastEventText = styled.Text`
   font-size: 16px;
   font-weight: bold;
   text-align: center;
+  margin: 0 5px;
+  color: ${props => (props.owner ? '#000' : '#e5556e')};
+`;
+
+export const SubscribedEvent = styled.View`
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+  background: rgba(0,255,0, 0.1);
+  padding: 5px 0;
   margin: 0 20px;
+`;
+
+export const SubscribedEventText = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 5px;
+  color: #07d600;
 `;

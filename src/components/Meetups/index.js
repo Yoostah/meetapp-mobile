@@ -1,5 +1,5 @@
-import React, {useMemo, useState} from 'react';
-
+import React, {useMemo, useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { formatRelative } from 'date-fns/esm';
@@ -16,13 +16,33 @@ import {
   TextArea,
   ButtonSubmit,
   TextInfo,
-  PastEvent
+  PastEvent,
+  PastEventText,
+  SubscribedEvent,
+  SubscribedEventText
 } from './styles';
+import api from '~/services/api';
 
 
-export default function Meetups({ meetupData }) {
+export default function Meetups({ meetupData, reloadMeetups }) {
+  const loggedUser = useSelector(state => state.user.profile.id);
   const { meetup_banner } = meetupData;
+
   const [pastEventTime, setPastEventTime] = useState();
+  const [subscribed, setSubscribed] = useState(false);
+
+  useEffect(() => {
+    async function checkSubscribed() {
+      const subscriptions = await api.get('subscription');
+
+      subscriptions.data.find(meetup =>
+        meetup.Meetup.id === meetupData.id ? setSubscribed(true) : null,
+      );
+    }
+
+    checkSubscribed();
+
+  }, [meetupData]);
 
   useMemo(() =>{
     if(meetupData.past){
@@ -35,6 +55,13 @@ export default function Meetups({ meetupData }) {
     }
 
   },[]);
+
+  async function handleSubscription(id){
+    await api.post('subscription',{
+      meetup_id: id
+    })
+    reloadMeetups();
+  }
 
   return (
     <Container>
@@ -59,12 +86,32 @@ export default function Meetups({ meetupData }) {
           <TextInfo>Organizador: {meetupData.owner.name}</TextInfo>
         </TextArea>
       </MeetupData>
-      { meetupData.past ? (<PastEvent>Meetup foi realizado {pastEventTime}</PastEvent>) : (
-      <ButtonSubmit
-        onPress={() => {}}
-      >
-        Realizar Inscrição
-      </ButtonSubmit>)}
+      { meetupData.past ? (<PastEventText>Meetup foi realizado {pastEventTime}</PastEventText>) : (
+        meetupData.user_id === loggedUser ? (
+        <PastEvent>
+          <PastEventText owner>
+            Seu Evento
+          </PastEventText>
+          <Icon name="new-releases" size={20} color="#e5556e"/>
+        </PastEvent>
+        ) : (
+          subscribed ? (
+
+            <SubscribedEvent>
+              <SubscribedEventText>
+              Você já está incrito
+              </SubscribedEventText>
+            <Icon name="check-circle" size={20} color="#07d600"/>
+            </SubscribedEvent>
+
+          ) : (
+          <ButtonSubmit onPress={() => {handleSubscription(meetupData.id)}}>
+            Realizar Inscrição
+          </ButtonSubmit>)
+
+        )
+        )
+      }
 
     </Container>
   );

@@ -10,37 +10,37 @@ import Meetups from '~/components/Meetups';
 import { Container, DateSelector, DateButton, TextDate, List, NoMeetups, NoMeetupsText } from './styles';
 
 import api from '~/services/api';
-import { API_IP } from 'react-native-dotenv';
 
 export default function Dashboard() {
   const [date, setDate] = useState(new Date());
   const dateFormated = format(date, "d 'de' MMMM 'de' yyyy", { locale: ptBR });
   const [meetups, setMeetups] = useState([]);
 
-  useEffect(() => {
-    async function availableMeetups() {
-      try {
-        const response = await api.get(
-          `meetup?date=${new Date(date).toISOString()}`
+  async function loadavailableMeetups() {
+    try {
+      const response = await api.get(
+        `meetup?date=${new Date(date).toISOString()}`
         );
 
-        const formattedMeetup = response.data.map(meetup => ({
-          ...meetup,
-          formattedData: format(
-            parseISO(meetup.schedule),
-            "d 'de' MMMM ', às' HH:mm'h'",
-            {
-              locale: ptBR,
-            }
+      const formattedMeetup = response.data.map(meetup => ({
+        ...meetup,
+        formattedData: format(
+          parseISO(meetup.schedule),
+          "d 'de' MMMM ', às' HH:mm'h'",
+          {
+            locale: ptBR,
+          }
           ),
-        }));
-        setMeetups(formattedMeetup);
-      } catch (error) {
-        // Alert.alert('Não foi possivel carregar as meetups');
-      }
-    }
+      }));
 
-    availableMeetups();
+        setMeetups(formattedMeetup);
+    } catch (error) {
+      // Alert.alert('Não foi possivel carregar as meetups');
+    }
+  }
+
+  useEffect(() => {
+    loadavailableMeetups();
   }, [date]);
 
   //console.tron.log(meetups.length);
@@ -61,7 +61,7 @@ export default function Dashboard() {
           <List
             data={meetups}
             keyExtractor={item => String(item.id)}
-            renderItem={({ item }) => <Meetups meetupData={item} />}
+            renderItem={({ item }) => <Meetups meetupData={item} reloadMeetups={loadavailableMeetups}/>}
           />
         ) : (
         <NoMeetups>

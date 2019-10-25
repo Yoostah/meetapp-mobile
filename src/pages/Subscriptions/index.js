@@ -28,7 +28,7 @@ export default function Subscriptions() {
 
   useEffect(() => {
     loadSubscribedEvents();
-  }, [subscriptions]);
+  }, []);
 
   //console.tron.log(subscriptions);
   return (
