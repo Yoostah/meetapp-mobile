@@ -24,3 +24,19 @@ export const List = styled.FlatList.attrs({
   showsVerticalScrollIndicator: false,
   contentContainerStyle: { padding: 20 },
 })``;
+
+export const NoMeetups = styled.View`
+  padding: 20px;
+  margin-top:30px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const NoMeetupsText = styled.Text`
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 18px;
+  line-height: 20px;
+
+`;

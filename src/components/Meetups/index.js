@@ -2,6 +2,8 @@ import React from 'react';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import { API_IP } from 'react-native-dotenv';
+
 import {
   Container,
   Banner,
@@ -19,7 +21,7 @@ export default function Meetups({ meetupData }) {
     <Container>
       <Banner
         source={{
-          uri: `http://192.168.1.110:3333/files/${meetup_banner &&
+          uri: API_IP + `/files/${meetup_banner &&
             meetup_banner.path}`,
         }}
       />

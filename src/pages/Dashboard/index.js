@@ -7,9 +7,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Background from '~/components/Background';
 import Meetups from '~/components/Meetups';
 
-import { Container, DateSelector, DateButton, TextDate, List } from './styles';
+import { Container, DateSelector, DateButton, TextDate, List, NoMeetups, NoMeetupsText } from './styles';
 
 import api from '~/services/api';
+import { API_IP } from 'react-native-dotenv';
 
 export default function Dashboard() {
   const [date, setDate] = useState(new Date());
@@ -42,7 +43,7 @@ export default function Dashboard() {
     availableMeetups();
   }, [date]);
 
-  // console.tron.log(meetups);
+  console.tron.log(meetups.length);
 
   return (
     <Background>
@@ -56,11 +57,19 @@ export default function Dashboard() {
             <Icon name="chevron-right" size={30} color="#fff" />
           </DateButton>
         </DateSelector>
-        <List
-          data={meetups}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => <Meetups meetupData={item} />}
-        />
+        {meetups.length ? (
+          <List
+            data={meetups}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => <Meetups meetupData={item} />}
+          />
+        ) : (
+        <NoMeetups>
+          <Icon name="event-busy" size={64} color="#F00" />
+          <NoMeetupsText>Nenhum Meetup nesta data.</NoMeetupsText>
+        </NoMeetups>
+        )}
+
       </Container>
     </Background>
   );
