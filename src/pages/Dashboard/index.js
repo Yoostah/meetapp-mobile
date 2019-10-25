@@ -43,7 +43,7 @@ export default function Dashboard() {
     availableMeetups();
   }, [date]);
 
-  console.tron.log(meetups.length);
+  //console.tron.log(meetups.length);
 
   return (
     <Background>
@@ -78,6 +78,6 @@ export default function Dashboard() {
 Dashboard.navigationOptions = {
   tabBarLabel: 'Meetups',
   tabBarIcon: ({ tintColor }) => (
-    <Icon name="event" size={20} color={tintColor} />
+    <Icon name="list" size={20} color={tintColor} />
   ),
 };
