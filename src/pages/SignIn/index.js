@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Image } from 'react-native';
+import { Image, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import logo from '~/assets/logo.png';
@@ -26,6 +26,13 @@ export default function SignIn({ navigation }) {
   const [password, setPassword] = useState();
 
   function handleSubmit() {
+    if (!email || !password) {
+      Alert.alert(
+        'Dados inválidos',
+        'Os campos Email e Senha são obrigatórios.'
+      );
+      return;
+    }
     dispatch(signInRequest(email, password));
   }
 
