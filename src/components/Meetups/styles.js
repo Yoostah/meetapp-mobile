@@ -47,10 +47,9 @@ export const PastEvent = styled.View`
   flex-direction: row;
   align-content: center;
   justify-content: center;
-  background: rgba(0,0,0,.1);
+  background: rgba(0, 0, 0, 0.1);
   padding: 5px 0;
-  margin: 0 20px;
-
+  margin: 38px 0 -20px;
 `;
 
 export const PastEventText = styled.Text`
@@ -65,9 +64,9 @@ export const SubscribedEvent = styled.View`
   flex-direction: row;
   align-content: center;
   justify-content: center;
-  background: rgba(0,255,0, 0.1);
+  background: rgba(0, 255, 0, 0.1);
   padding: 5px 0;
-  margin: 0 20px;
+  margin: 38px 0 -20px;
 `;
 
 export const SubscribedEventText = styled.Text`

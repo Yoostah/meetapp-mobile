@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Alert } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -19,22 +19,18 @@ import {
 } from './styles';
 import api from '~/services/api';
 
-
 export default function SubscribedEvents({ eventData, reloadSubscribed }) {
-
-  const dateParsed = useMemo(() =>{
-    return format(
-      parseISO(eventData.Meetup.schedule),
-      "d 'de' MMMM ', às' HH:mm'h'",
-      {
-        locale: ptBR,
-      }
-    )
-  });
+  const dateParsed = format(
+    parseISO(eventData.Meetup.schedule),
+    "d 'de' MMMM ', às' HH:mm'h'",
+    {
+      locale: ptBR,
+    }
+  );
 
   const { meetup_banner } = eventData.Meetup;
 
-  async function handleUnsubscribe(id){
+  async function handleUnsubscribe(id) {
     await api.delete(`subscription/${id}`);
     reloadSubscribed();
   }
@@ -43,8 +39,7 @@ export default function SubscribedEvents({ eventData, reloadSubscribed }) {
     <Container>
       <Banner
         source={{
-          uri: API_IP + `/files/${meetup_banner &&
-            meetup_banner.path}`,
+          uri: `${API_IP}/files/${meetup_banner && meetup_banner.path}`,
         }}
       />
       <MeetupData>
@@ -77,15 +72,12 @@ export default function SubscribedEvents({ eventData, reloadSubscribed }) {
               },
               {
                 text: 'Sim',
-                onPress: () =>
-                handleUnsubscribe(eventData.id)
-                ,
+                onPress: () => handleUnsubscribe(eventData.id),
               },
             ],
             { cancelable: false }
-          )
-          }
-        }
+          );
+        }}
       >
         Cancelar Inscrição
       </ButtonSubmit>

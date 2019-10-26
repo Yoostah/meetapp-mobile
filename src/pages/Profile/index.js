@@ -1,34 +1,51 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Header from '~/components/Header';
 import Background from '~/components/Background';
 
-import { signUpRequest, signOut } from '~/store/modules/auth/actions';
-import { Container, Form, FormInput, SubmitButton } from './styles';
+import { signOut } from '~/store/modules/auth/actions';
+import { updateProfileRequest } from '~/store/modules/user/actions';
+import { Container, Form, FormInput, SubmitButton, Hr } from './styles';
 
 export default function Profile({ navigation }) {
   const dispatch = useDispatch();
   const loading = useSelector(state => state.auth.loading);
+  const profile = useSelector(state => state.user.profile);
 
   const emailRef = useRef();
   const oldPasswordRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
 
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
+  const [name, setName] = useState(profile.name);
+  const [email, setEmail] = useState(profile.email);
   const [oldPassword, setOldPassword] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
 
+  useEffect(() => {
+    setOldPassword('');
+    setPassword('');
+    setConfirmPassword('');
+  }, [profile]);
+
   function handleSubmit() {
     dispatch(
-      signUpRequest(name, email, oldPassword, password, confirmPassword)
+      updateProfileRequest({
+        name,
+        email,
+        oldPassword,
+        password,
+        confirmPassword,
+      })
     );
   }
 
   return (
     <Background>
+      <Header navigation={navigation} />
       <Container>
         <Form>
           <FormInput
@@ -50,9 +67,10 @@ export default function Profile({ navigation }) {
             ref={emailRef}
             returnKeyType="next"
             onSubmitEditing={() => oldPasswordRef.current.focus()}
-            alue={email}
+            value={email}
             onChangeText={setEmail}
           />
+          <Hr />
           <FormInput
             icon="lock-outline"
             secureTextEntry
@@ -61,7 +79,7 @@ export default function Profile({ navigation }) {
             autoCapitalize="none"
             returnKeyType="next"
             onSubmitEditing={() => passwordRef.current.focus()}
-            alue={oldPassword}
+            value={oldPassword}
             onChangeText={setOldPassword}
           />
           <FormInput
@@ -72,7 +90,7 @@ export default function Profile({ navigation }) {
             autoCapitalize="none"
             returnKeyType="next"
             onSubmitEditing={() => confirmPasswordRef.current.focus()}
-            alue={password}
+            value={password}
             onChangeText={setPassword}
           />
           <FormInput
@@ -83,7 +101,7 @@ export default function Profile({ navigation }) {
             autoCapitalize="none"
             returnKeyType="send"
             onSubmitEditing={handleSubmit}
-            alue={confirmPassword}
+            value={confirmPassword}
             onChangeText={setConfirmPassword}
           />
           <SubmitButton loading={loading} onPress={handleSubmit}>

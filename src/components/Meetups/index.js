@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -28,19 +28,6 @@ export default function Meetups({ meetupData, reloadMeetups }) {
   const { meetup_banner } = meetupData;
 
   const [pastEventTime, setPastEventTime] = useState();
-  const [subscribed, setSubscribed] = useState(false);
-
-  useEffect(() => {
-    async function checkSubscribed() {
-      const subscriptions = await api.get('subscription');
-
-      subscriptions.data.find(meetup =>
-        meetup.Meetup.id === meetupData.id ? setSubscribed(true) : null
-      );
-    }
-
-    checkSubscribed();
-  }, [meetupData]);
 
   useMemo(() => {
     if (meetupData.past) {
@@ -68,8 +55,7 @@ export default function Meetups({ meetupData, reloadMeetups }) {
     <Container>
       <Banner
         source={{
-          uri: `${API_IP  }/files/${meetup_banner &&
-            meetup_banner.path}`,
+          uri: `${API_IP}/files/${meetup_banner && meetup_banner.path}`,
         }}
       />
       <MeetupData>
@@ -88,13 +74,15 @@ export default function Meetups({ meetupData, reloadMeetups }) {
         </TextArea>
       </MeetupData>
       {meetupData.past ? (
-        <PastEventText>Meetup foi realizado {pastEventTime}</PastEventText>
+        <PastEvent>
+          <PastEventText>Meetup foi realizado {pastEventTime}</PastEventText>
+        </PastEvent>
       ) : meetupData.user_id === loggedUser ? (
         <PastEvent>
           <PastEventText owner>Seu Evento</PastEventText>
           <Icon name="new-releases" size={20} color="#e5556e" />
         </PastEvent>
-      ) : subscribed ? (
+      ) : meetupData.subscribed ? (
         <SubscribedEvent>
           <SubscribedEventText>Você já está incrito</SubscribedEventText>
           <Icon name="check-circle" size={20} color="#07d600" />

@@ -9,12 +9,12 @@ export const Container = styled.KeyboardAvoidingView.attrs({
   behavior: 'padding',
 })`
   flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding: 0 30px;
 `;
 
-export const Form = styled.View`
+export const Form = styled.ScrollView.attrs({
+  showsVerticalScrollIndicator: false,
+  contentContainerStyle: { padding: 30 },
+})`
   align-self: stretch;
 `;
 
@@ -24,4 +24,9 @@ export const FormInput = styled(Input)`
 
 export const SubmitButton = styled(Button)`
   margin-top: 5px;
+`;
+export const Hr = styled.View`
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 20px 0 30px;
 `;
