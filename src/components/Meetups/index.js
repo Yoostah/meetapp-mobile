@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+
+import { useSelector, useDispatch } from 'react-redux';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { formatRelative } from 'date-fns/esm';
@@ -7,6 +9,10 @@ import { parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/esm/locale';
 
 import { API_IP } from 'react-native-dotenv';
+import {
+  subscribeRequestLoading,
+  subscribeRequestDone,
+} from '~/store/modules/subscription/actions';
 
 import {
   Container,
@@ -24,7 +30,11 @@ import {
 import api from '~/services/api';
 
 export default function Meetups({ meetupData, reloadMeetups }) {
+  const dispatch = useDispatch();
+
+  const loading = useSelector(state => state.subscription.loading);
   const loggedUser = useSelector(state => state.user.profile.id);
+
   const { meetup_banner } = meetupData;
 
   const [pastEventTime, setPastEventTime] = useState();
@@ -45,10 +55,12 @@ export default function Meetups({ meetupData, reloadMeetups }) {
   }, [meetupData.past, meetupData.schedule]);
 
   async function handleSubscription(id) {
+    dispatch(subscribeRequestLoading());
     await api.post('subscription', {
       meetup_id: id,
     });
     reloadMeetups();
+    dispatch(subscribeRequestDone());
   }
 
   return (
@@ -89,6 +101,7 @@ export default function Meetups({ meetupData, reloadMeetups }) {
         </SubscribedEvent>
       ) : (
         <ButtonSubmit
+          loading={loading}
           onPress={() => {
             handleSubscription(meetupData.id);
           }}

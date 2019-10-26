@@ -38,7 +38,7 @@ function Dashboard({ isFocused, navigation }) {
         const subscribedEventsID = subscribedEvents.data.map(
           event => event.Meetup.id
         );
-        console.tron.log(subscribedEventsID);
+
         const formattedMeetup = response.data.map(meetup => ({
           ...meetup,
           formattedData: format(
